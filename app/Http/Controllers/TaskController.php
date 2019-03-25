@@ -14,11 +14,7 @@ class TaskController extends Controller
         $captaha_obj =CaptchaFactory::Captcha('invertedword');
         $image = $captaha_obj->getCaptcha();
         $captaha_value = $captaha_obj->captchaValue();
-       // $size = getimagesizefromstring($image['results']);
-       //  return  response($image, 200, [
-       //      'Content-Type' =>'image/png',
-       //  ]);
-        return $image;
-        return 'Hello, World!';
+        return  $this->respond($image,'image');
+
     }
 }

@@ -13,7 +13,10 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        return Article::all();
+       $data = Article::all();
+      // var_dump($data);die;
+
+        return $this->success($data);
     }
 
     public function show(Article $article)
