@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Requests\ArticleFormRequest;
+use App\Http\Requests\ArticleStoreRequest;
 use Illuminate\Http\Request;
 use App\Article;
+use Illuminate\Support\Facades\Validator;
 class ArticleController extends Controller
 {
     /**
@@ -11,12 +13,30 @@ class ArticleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-       $data = Article::all();
-      // var_dump($data);die;
 
-        return $this->success($data);
+
+        // $validator = Validator::make($request->all(), [
+        //     'id' => 'required|integer',
+        //     'page' => 'required|integer',
+        // ],[]);
+        // if ($validator->fails()) {
+        //
+        //     return $this->failed(155001, $validator->errors()->all(),$validator->errors()->all());
+        //
+        // }
+        // // if ($validator->fails()) {
+        // //
+        // //     return $this->failed(155001, $validator->errors()->first(),$validator->errors()->first());
+        // //
+        // // }
+        $count = isset($request->count) ? (int)$request->count : 5;
+        $datas = Article::orderBy('id', 'desc')->paginate($count);
+      // $data = Article::all();
+
+
+        return $this->success($datas);
     }
 
     public function show(Article $article)
@@ -24,8 +44,11 @@ class ArticleController extends Controller
         return $article;
     }
 
-    public function store(Request $request)
+    public function store(ArticleStoreRequest $request)
     {
+
+
+
         $article = Article::create($request->all());
 
         return response()->json($article, 201);

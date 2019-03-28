@@ -19,7 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::resource('posts', 'PostController');
 
-
+//Route::post('articles','ArticleController@store');
 Route::resource('articles', 'ArticleController');
 // Route::get('articles', function() {
 //     // If the Content-Type and Accept headers are set to 'application/json',

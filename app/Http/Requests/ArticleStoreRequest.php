@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SubmitFormRequest extends FormRequest
+class ArticleStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class SubmitFormRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -32,14 +32,15 @@ class SubmitFormRequest extends FormRequest
         ];
     }
 
+
     public function messages()
     {
 
         return[
             '*.required' => ':attribute为必填项',
             '*.integer' => ':attribute需为整数',
-            '*.email' => ':attribute需为合法邮件地址',
-            ];
+            '*.string' => ':attribute需为字符串',
+        ];
 
     }
 }

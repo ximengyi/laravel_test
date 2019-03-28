@@ -4,7 +4,9 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-
+use Illuminate\Routing\Router;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\ValidationException;
 class Handler extends ExceptionHandler
 {
     /**
@@ -52,6 +54,31 @@ class Handler extends ExceptionHandler
                 'error' => 'Resource not found.'
             ],404);
         }
+
+        if ($exception instanceof ValidationException) {
+
+          return $this->FormatExceptionJson($exception);
+
+        }
+
         return parent::render($request, $exception);
+     }
+
+
+    public function FormatExceptionJson($exception)
+    {
+        $errMessage = [];
+        $errMessage = array_values($exception->errors());
+        // foreach ($exception->errors() as $item)
+        // {
+        //     $errMessage [] = $item;
+        // }
+        $response = [
+            'err_nu'=>'-99',
+            'err_msg'=>$exception->getMessage(),
+            'results'=>$errMessage
+        ];
+
+        return response()->json($response, $exception->status);
     }
 }
