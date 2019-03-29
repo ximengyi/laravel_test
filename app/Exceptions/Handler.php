@@ -37,6 +37,10 @@ class Handler extends ExceptionHandler
     public function report(Exception $exception)
     {
         parent::report($exception);
+        if ($exception instanceof Exception) {
+            return $this->FormatExceptionJson($exception);
+        }
+
     }
 
     /**
@@ -57,15 +61,19 @@ class Handler extends ExceptionHandler
 
         if ($exception instanceof ValidationException) {
 
-          return $this->FormatExceptionJson($exception);
+          return $this->ValidateExceptionJson(-99,$exception);
 
+        }
+
+        if ($exception instanceof Exception) {
+            return $this->FormatExceptionJson($exception);
         }
 
         return parent::render($request, $exception);
      }
 
 
-    public function FormatExceptionJson($exception)
+    public function ValidateExceptionJson($err_nu,$exception)
     {
         $errMessage = [];
         $errMessage = array_values($exception->errors());
@@ -74,9 +82,21 @@ class Handler extends ExceptionHandler
         //     $errMessage [] = $item;
         // }
         $response = [
-            'err_nu'=>'-99',
+            'err_nu'=>$err_nu,
             'err_msg'=>$exception->getMessage(),
             'results'=>$errMessage
+        ];
+
+        return response()->json($response, $exception->status);
+    }
+
+
+    public function FormatExceptionJson($exception)
+    {
+        $response = [
+            'err_nu'=>$exception->getCode(),
+            'err_msg'=>$exception->getMessage(),
+            'results'=>$exception->getMessage()
         ];
 
         return response()->json($response, $exception->status);

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Http\Requests\ArticleFormRequest;
 use App\Http\Requests\ArticleStoreRequest;
 use Illuminate\Http\Request;
@@ -31,6 +32,9 @@ class ArticleController extends Controller
         // //     return $this->failed(155001, $validator->errors()->first(),$validator->errors()->first());
         // //
         // // }
+
+
+        throw new \Exception("测试的异常");
         $count = isset($request->count) ? (int)$request->count : 5;
         $datas = Article::orderBy('id', 'desc')->paginate($count);
       // $data = Article::all();
