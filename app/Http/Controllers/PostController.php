@@ -15,7 +15,7 @@ class PostController extends Controller
     {
         //
 
-        return "hellow";
+
 
         return json_decode("dfasdfasdf");
     }

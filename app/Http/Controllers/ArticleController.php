@@ -33,8 +33,11 @@ class ArticleController extends Controller
         // //
         // // }
 
+      throw new \App\Exceptions\CustomException('account_login_err');
 
-        throw new \Exception("测试的异常");
+
+
+
         $count = isset($request->count) ? (int)$request->count : 5;
         $datas = Article::orderBy('id', 'desc')->paginate($count);
       // $data = Article::all();

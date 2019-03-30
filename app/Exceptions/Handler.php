@@ -7,6 +7,8 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Routing\Router;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Contracts\Container\Container;
+
 class Handler extends ExceptionHandler
 {
     /**
@@ -28,6 +30,17 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
+
+    //
+    // public function __construct(Container $container)
+    // {
+    //
+    //     parent::__construct();
+    //
+    // }
+
+
+
     /**
      * Report or log an exception.
      *
@@ -37,8 +50,8 @@ class Handler extends ExceptionHandler
     public function report(Exception $exception)
     {
         parent::report($exception);
-        if ($exception instanceof Exception) {
-            return $this->FormatExceptionJson($exception);
+        if ($exception instanceof CustomException) {
+            throw $exception;
         }
 
     }
@@ -65,12 +78,21 @@ class Handler extends ExceptionHandler
 
         }
 
-        if ($exception instanceof Exception) {
-            return $this->FormatExceptionJson($exception);
+        if ($exception instanceof CustomException)  {
+
+            return $exception->renderCustomExceptionJson();
+
         }
 
         return parent::render($request, $exception);
      }
+
+
+
+
+
+
+
 
 
     public function ValidateExceptionJson($err_nu,$exception)
@@ -83,7 +105,7 @@ class Handler extends ExceptionHandler
         // }
         $response = [
             'err_nu'=>$err_nu,
-            'err_msg'=>$exception->getMessage(),
+            'err_msg'=>"输入格式有误",
             'results'=>$errMessage
         ];
 
@@ -91,14 +113,4 @@ class Handler extends ExceptionHandler
     }
 
 
-    public function FormatExceptionJson($exception)
-    {
-        $response = [
-            'err_nu'=>$exception->getCode(),
-            'err_msg'=>$exception->getMessage(),
-            'results'=>$exception->getMessage()
-        ];
-
-        return response()->json($response, $exception->status);
-    }
 }

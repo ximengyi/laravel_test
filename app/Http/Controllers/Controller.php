@@ -56,7 +56,7 @@ class Controller extends BaseController
     }
 
 
-    public function failed($err_nu,$err_msg,$data){
+    public function failed($err_nu,$err_msg,$data=''){
         $data = [
             'err_nu' => $err_nu,
             'err_msg' => $err_msg,
