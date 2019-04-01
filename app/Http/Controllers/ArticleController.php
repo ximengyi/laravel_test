@@ -17,23 +17,31 @@ class ArticleController extends Controller
     public function index(Request $request)
     {
 
+     // $id =$request->input('id');
+     // $page =$request->input('page');
+     //
+     // echo  $page;
+     // echo $id;die;
+     //    echo TEST_NAME;die;
+     //    echo CHANNEL;die;
+     //
+     // echo public_path();die;
 
-        // $validator = Validator::make($request->all(), [
-        //     'id' => 'required|integer',
-        //     'page' => 'required|integer',
-        // ],[]);
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|integer',
+            'page' => 'required|integer',
+        ],[]);
+        if ($validator->fails()) {
+
+            return $this->failed(155001, $validator->errors()->all(),$validator->errors()->all());
+
+        }
         // if ($validator->fails()) {
         //
-        //     return $this->failed(155001, $validator->errors()->all(),$validator->errors()->all());
+        //     return $this->failed(155001, $validator->errors()->first(),$validator->errors()->first());
         //
         // }
-        // // if ($validator->fails()) {
-        // //
-        // //     return $this->failed(155001, $validator->errors()->first(),$validator->errors()->first());
-        // //
-        // // }
-
-      throw new \App\Exceptions\CustomException('account_login_err');
+     // throw new \App\Exceptions\CustomException('account_login_err');
 
 
 
