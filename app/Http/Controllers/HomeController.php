@@ -27,4 +27,20 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
+    public function session()
+    {
+
+        $id = session_id();
+        echo $id;
+        echo 1222;die;
+        return  'fasdf';
+    }
+
+    public function getName()
+    {
+
+        return  'zhangsan';
+    }
+
 }

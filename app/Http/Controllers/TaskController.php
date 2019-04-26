@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Libraries\Captcha\CaptchaFactory;
+use App\Mail\Register;
+use App\Libraries\Captcha\CaptchaFactory;
+use Illuminate\Support\Facades\Mail;
 class TaskController extends Controller
 {
     //
@@ -16,7 +18,24 @@ class TaskController extends Controller
         $captaha_value = $captaha_obj->captchaValue();
         return  $this->respond($image,'image');
     }
+
+    public function send(Request $request)
+    {
+
+
+       $sendUser =  $request->input('email','laomeng820@163.com');
+
+       $res =  Mail::to('laomeng820@163.com')->send(new Register());
+       
+       if($res){
+           
+           echo '发送成功';
+       }
+
+    }
 }
+
+
 // app_path()
 //
 // app_path函数返回app目录的绝对路径：

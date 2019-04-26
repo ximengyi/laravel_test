@@ -1,0 +1,171 @@
+<div id ="container" class="container">
+    <style>
+        .tip{
+            text-align: left;
+            font-size: 14px;
+            color: #333333;
+            line-height: 14px;
+        }
+        .demo2 {
+            width:20px;
+            height:20px;
+            border-radius:20px ;
+            background:green;
+            display:block;
+            position: relative;
+        }
+        .demo2:before, .demo2::after {
+            content:"";
+            height:14px;
+            width:3px;
+            border-radius: 5px;
+            display:block;
+            background:white;
+            position: absolute;
+            top:3px;/*40-6=34*/
+            left:10px;/*make the two rects in the middle of the cycle */
+            transform:rotate(45deg);
+            -ms-transform:rotate(45deg);
+        }
+        .demo2::before {
+            height:7.5px;
+            transform: rotate(-45deg);
+            -ms-transform:rotate(-45deg);
+            position: absolute;
+            top:9px;/*40-18=12  */
+            left:4px;
+        }
+        .container {
+            position: relative;
+        }
+        .demo2 {
+            position:absolute;
+        }
+        #flash_Button{
+            position: absolute;
+            right:0;
+            top: -10px;
+            width:60px;
+            height: 30px;
+            background: #E60112;
+            border-radius: 4px;
+            color:#fff;
+            text-align: center;
+            cursor:pointer;
+            font-size: 12px;
+            line-height: 30px;
+        }
+        #img_captcha{
+            margin-top: 10px
+        }
+    </style>
+
+    <div class="tip">
+        请点击下图中所有倒立的汉字
+        <span id='flash_Button'onclick="flashOnClick(event)">刷新</span>
+    </div>
+    <img id='img_captcha' src="/account/request_captcha" onclick="mapOnClick(event)">
+
+    <script>var bucket = [];
+
+    var cap_name = "verify";
+    function flashOnClick(){
+        var container = document.getElementsByClassName('container')[0];
+        var spans = container.getElementsByClassName('demo2');
+        var length = spans.length;
+        for (var i = length -1; i >= 0; i--){
+            spans[i].remove();
+        }
+        bucket = [];
+        delCookie(cap_name);
+        var img = document.getElementById('img_captcha');
+        var newImgSrc = '/account/request_captcha?t=' + (new Date().getTime());
+        img.setAttribute('src',newImgSrc);
+    }
+    function mapOnClick(e){
+        e = e || window.event;
+        var imgId = document.getElementById('img_captcha');
+        var con = document.getElementById('container');
+        // var currentWidth = imgId.naturalWidth;
+        // var currentHeight = imgId.naturalHeight;
+        var currentWidth = imgId.width
+        var currentHeight = imgId.height;
+        // var offsetX = e.pageX - offset(imgId).left;
+        // var offsetY = e.pageY - offset(imgId).top;
+        var offsetX = e.pageX - offset(con).left;
+        var offsetY = e.pageY - offset(con).top;
+        var vlue = exchange(offsetX,currentWidth,{$length});
+        vlue =parseInt(vlue);
+        bucket.push(vlue);
+        var span  =  createElement(vlue);
+        span.style.top = offsetY -6+ 'px';
+        span.style.left = offsetX-6 + 'px';
+        document.getElementsByClassName('container')[0].appendChild(span);
+    }
+
+    function createElement(vlue) {
+        var span = document.createElement('span');
+        span.onclick = function (ev) {
+            this.remove();
+            var  index = bucket.indexOf(vlue);
+            if (index > -1) {
+                bucket.splice(index, 1);
+            }
+            setCookie(cap_name,bucket.join('-'));
+            span.setAttribute('class', 'demo2');
+        }
+        bucket = unique3(bucket).sort();
+        setCookie(cap_name,bucket.join('-'));
+        span.setAttribute('class', 'demo2');
+        return span;
+    }
+
+    function setCookie(name,value) {
+        document.cookie = name + '=' + escape(value);
+    }
+    function delCookie(name) {
+        var exp = new Date();
+        exp.setTime(exp.getTime() - 1);
+        var cval=getCookie(name);
+        if(cval!=null)
+            document.cookie= name + "="+cval+";expires="+exp.toGMTString();
+    }
+    function getCookie(name)
+    {
+        var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+        if(arr=document.cookie.match(reg))
+            return unescape(arr[2]);
+        else
+            return null;
+    }
+
+    function exchange(x,width,length){
+        return length * (x/width);
+    }
+    function unique3(array){
+        var n = [array[0]];
+        for(var i = 1; i < array.length; i++) {
+            if (array.indexOf(array[i]) == i) n.push(array[i]);
+        }
+        return n;
+    }
+    function offset(target) {
+        var top = 0,
+            left = 0
+
+        while(target.offsetParent) {
+            top += target.offsetTop
+            left += target.offsetLeft
+            target = target.offsetParent
+        }
+
+        return {
+            top: top,
+            left: left,
+        }
+    }
+
+    </script>
+
+</div>
+</div>

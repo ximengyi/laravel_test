@@ -64,7 +64,7 @@
         </style>
     </head>
     <body>
-        <div class="flex-center position-ref full-height">
+        <div class="flex-top position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
@@ -79,19 +79,21 @@
                 </div>
             @endif
 
-            <div class="content">
-                <div class="title m-b-md">
-                hello world
-                </div>
+            <div class="content  title m-b-md">
 
                 <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+                    <a href="https://laravel.com/docs">首页</a>
+                    <a href="https://laracasts.com">测试</a>
+                    <a href="https://laravel-news.com">测试</a>
+                    <a href="https://nova.laravel.com">测试</a>
+                    <a href="https://forge.laravel.com">下载</a>
+                    <a href="https://github.com/laravel/laravel">新闻</a>
                 </div>
+
+                {{--<div class="title m-b-md">--}}
+                    {{--hello world--}}
+                {{--</div>--}}
+
             </div>
         </div>
     </body>
