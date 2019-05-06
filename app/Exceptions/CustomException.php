@@ -9,10 +9,10 @@
 namespace App\Exceptions;
 
 use Exception;
-
+use App\Tools\ResponseFormatHelper;
 class CustomException extends Exception
 {
-
+ use ResponseFormatHelper;
 
     public function __construct($message = "",$code = 0)
     {
@@ -28,7 +28,7 @@ class CustomException extends Exception
 
             $this->message = config("errcode.{$message}.1",'错误信息设置不正确');
 
-            $this->code = config("errcode.{$message}.0",'00001');
+            $this->code = config("errcode.{$message}.0",'-0002');
         }
 
 
@@ -39,13 +39,7 @@ class CustomException extends Exception
     public function renderCustomExceptionJson ()
     {
 
-        $response = [
-            'err_nu'=> $this->getCode(),
-            'err_msg'=>$this->getMessage(),
-            'results'=>$this->getMessage()
-        ];
-
-        return response()->json($response, 200);
+        return $this->formatRespond($this->getCode(),$this->getMessage(),$this->getMessage());
 
     }
 

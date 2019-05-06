@@ -3,14 +3,18 @@
 namespace App\Exceptions;
 
 use Exception;
+use App\Tools\ResponseFormatHelper;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Routing\Router;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Contracts\Container\Container;
-
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class Handler extends ExceptionHandler
 {
+
+    use ResponseFormatHelper;
     /**
      * A list of the exception types that are not reported.
      *
@@ -74,7 +78,7 @@ class Handler extends ExceptionHandler
 
         if ($exception instanceof ValidationException) {
 
-          return $this->ValidateExceptionJson(-99,$exception);
+          return $this->validateExceptionJson($exception);
 
         }
 
@@ -83,34 +87,36 @@ class Handler extends ExceptionHandler
             return $exception->renderCustomExceptionJson();
 
         }
+        if ($exception instanceof NotFoundHttpException)  {
+
+            return $this->notFoundHttpExceptionJson($exception);
+
+        }
 
         return parent::render($request, $exception);
+
      }
 
 
 
-
-
-
-
-
-
-    public function ValidateExceptionJson($err_nu,$exception)
+    public function validateExceptionJson($exception)
     {
         $errMessage = [];
-        $errMessage = array_values($exception->errors());
-        // foreach ($exception->errors() as $item)
-        // {
-        //     $errMessage [] = $item;
-        // }
-        $response = [
-            'err_nu'=>$err_nu,
-            'err_msg'=>"输入格式有误",
-            'results'=>$errMessage
-        ];
+        $errMessage = $exception->errors();
+        $errMessage = array_column($errMessage,0);
 
-        return response()->json($response, $exception->status);
+        $err_num = config("syscode.input_errors.0",'-0001');
+        $err_msg = config("syscode.input_errors.1",'系统错误信息设置不正确');
+        return $this->failed($err_num,$err_msg,$errMessage);
     }
 
+    public function notFoundHttpExceptionJson($exception)
+    {
+
+        $err_num = -9994;
+        $err_msg = '404找不到路由';
+        $errMessage =['请检查路由哦'];
+        return $this->formatRespond($err_num,$err_msg,$errMessage,Response::HTTP_NOT_FOUND);
+    }
 
 }

@@ -13,9 +13,6 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
-
-
 
         return json_decode("dfasdfasdf");
     }
