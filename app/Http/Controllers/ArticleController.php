@@ -26,22 +26,23 @@ class ArticleController extends Controller
      //    echo CHANNEL;die;
      //
      // echo public_path();die;
-
-        $validator = Validator::make($request->all(), [
-            'id' => 'required|integer',
-            'page' => 'required|integer',
-        ],[]);
-        if ($validator->fails()) {
-
-            return $this->failed(155001, $validator->errors()->all(),$validator->errors()->all());
-
-        }
-        // if ($validator->fails()) {
-        //
-        //     return $this->failed(155001, $validator->errors()->first(),$validator->errors()->first());
-        //
+     //
+     //    $validator = Validator::make($request->all(), [
+     //        'id' => 'required|integer',
+     //        'page' => 'required|integer',
+     //    ],[]);
+     //    if ($validator->fails()) {
+     //
+     //        return $this->failed(155001, $validator->errors()->all(),$validator->errors()->all());
+     //
+     //    }
+     //    // if ($validator->fails()) {
+     //    //
+     //    //     return $this->failed(155001, $validator->errors()->first(),$validator->errors()->first());
+     //    //
         // }
-     // throw new \App\Exceptions\CustomException('account_login_err');
+      throw new \App\Exceptions\CustomException('account_login_errr');
+
 
 
 

@@ -8,8 +8,6 @@ trait ResponseFormatHelper
 
     protected $statusCode =Response::HTTP_OK;
 
-
-
     public function getStatusCode()
     {
         return $this->statusCode;
@@ -30,7 +28,6 @@ trait ResponseFormatHelper
 
             case 'download':
                 return response()->download($data);
-
 
         }
 
@@ -61,5 +58,33 @@ trait ResponseFormatHelper
         $header [] = $status;
 
         return $this->respond($data,'json',$header);
+    }
+
+
+    protected function getCodeConfig($err_config,$file_name=ERRCODE_FILE_NAME)
+    {
+
+        $errNum =config("{$file_name}.{$err_config}.0",'-00001');
+        $errMsg = config("{$file_name}.{$err_config}.1",'找不到错误码配置');
+
+        return [
+            'err_num'=>$errNum,
+            'err_msg'=>$errMsg
+        ];
+    }
+
+
+    public function renderSyscodeJson($err_config,$status = Response::HTTP_OK)
+    {
+        $errResponse = $this->getCodeConfig($err_config,SYSCODE_FILE_NAME);
+        return $this->formatRespond($errResponse['err_num'],$errResponse['err_msg'],$errResponse['err_msg'],$status);
+    }
+
+
+    public function renderErrcodeJson($err_config,$err_msg = null,$status = Response::HTTP_OK)
+    {
+        $errResponse = $this->getCodeConfig($err_config,ERRCODE_FILE_NAME);
+        $err_msg  = $err_msg ?? $errResponse['err_msg'];
+        return $this->formatRespond($errResponse['err_num'],$errResponse['err_msg'],$err_msg,$status);
     }
 }

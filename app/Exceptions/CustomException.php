@@ -26,9 +26,9 @@ class CustomException extends Exception
 
         }else{
 
-            $this->message = config("errcode.{$message}.1",'错误信息设置不正确');
-
-            $this->code = config("errcode.{$message}.0",'-0002');
+            $errResponse = $this->getCodeConfig($message);
+            $this->message = $errResponse['err_msg'];
+            $this->code = $errResponse['err_num'];
         }
 
 

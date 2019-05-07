@@ -1,6 +1,5 @@
 <?php
 
-define('CHANNEL',1);
 
-define('TEST_NAME','shanghai');
-
+define('SYSCODE_FILE_NAME','syscode');
+define('ERRCODE_FILE_NAME','errcode');

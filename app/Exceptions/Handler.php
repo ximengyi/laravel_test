@@ -70,27 +70,20 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
 
-        if ($exception instanceof ModelNotFoundException) {
-            return response()->json([
-                'error' => 'Resource not found.'
-            ],404);
-        }
+        if ($exception instanceof NotFoundHttpException)  {
 
-        if ($exception instanceof ValidationException) {
+            return $this->notFoundHttpExceptionJson();
 
-          return $this->validateExceptionJson($exception);
+        }elseif ($exception instanceof ValidationException) {
 
-        }
+            return $this->validateExceptionJson($exception);
 
-        if ($exception instanceof CustomException)  {
+        }elseif ($exception instanceof CustomException)  {
 
             return $exception->renderCustomExceptionJson();
 
-        }
-        if ($exception instanceof NotFoundHttpException)  {
-
-            return $this->notFoundHttpExceptionJson($exception);
-
+        }elseif ($exception instanceof ModelNotFoundException) {
+           $this->modelNotFoundExceptionJson();
         }
 
         return parent::render($request, $exception);
@@ -101,22 +94,27 @@ class Handler extends ExceptionHandler
 
     public function validateExceptionJson($exception)
     {
-        $errMessage = [];
+
         $errMessage = $exception->errors();
         $errMessage = array_column($errMessage,0);
+        return $this->renderErrcodeJson('input_errors',$errMessage);
 
-        $err_num = config("syscode.input_errors.0",'-0001');
-        $err_msg = config("syscode.input_errors.1",'系统错误信息设置不正确');
-        return $this->failed($err_num,$err_msg,$errMessage);
     }
 
-    public function notFoundHttpExceptionJson($exception)
+
+    public function notFoundHttpExceptionJson()
     {
-
-        $err_num = -9994;
-        $err_msg = '404找不到路由';
-        $errMessage =['请检查路由哦'];
-        return $this->formatRespond($err_num,$err_msg,$errMessage,Response::HTTP_NOT_FOUND);
+        return $this->renderSyscodeJson('not_find_route');
     }
+
+
+    public function modelNotFoundExceptionJson()
+    {
+        return $this->renderSyscodeJson('not_find_model');
+
+    }
+
+
+
 
 }
