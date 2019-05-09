@@ -4,12 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
-use App\Tools\ResponseFormatHelper;
 
 class RedirectIfAuthenticated
 {
-
-    use ResponseFormatHelper;
     /**
      * Handle an incoming request.
      *
@@ -20,12 +17,8 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
-
-        if (!Auth::guard($guard)->check()) {
-
-
-          $this->failed();
-
+        if (Auth::guard($guard)->check()) {
+            return redirect('/home');
         }
 
         return $next($request);

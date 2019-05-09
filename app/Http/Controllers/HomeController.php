@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Libraries\Captcha;
+use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller
 {
@@ -28,18 +29,19 @@ class HomeController extends Controller
         return view('home');
     }
 
-    public function session()
+    public function ses()
     {
-
-        $id = session_id();
-        echo $id;
-        echo 1222;die;
-        return  'fasdf';
+        Session::put('test','justatest');
+       $result =  Session::get('test');
+        return  $result;
     }
 
     public function getName()
     {
-        return  'zhangsan';
+
+        return 1111;
+       $result =  Session::get('test');
+        return  $result;
     }
 
 }

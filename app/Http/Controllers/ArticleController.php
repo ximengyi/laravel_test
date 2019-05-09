@@ -41,7 +41,7 @@ class ArticleController extends Controller
      //    //     return $this->failed(155001, $validator->errors()->first(),$validator->errors()->first());
      //    //
         // }
-      throw new \App\Exceptions\CustomException('account_login_errr');
+    //  throw new \App\Exceptions\CustomException('account_login_err');
 
 
 
