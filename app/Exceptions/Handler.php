@@ -11,6 +11,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Contracts\Container\Container;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 class Handler extends ExceptionHandler
 {
 
@@ -83,8 +84,13 @@ class Handler extends ExceptionHandler
             return $exception->renderCustomExceptionJson();
 
         }elseif ($exception instanceof ModelNotFoundException) {
-           $this->modelNotFoundExceptionJson();
-        }
+          return $this->modelNotFoundExceptionJson();
+
+        } elseif ($exception instanceof MethodNotAllowedHttpException) {
+
+            return $this->methodNotAllowedHttpJson();
+
+            }
 
         return parent::render($request, $exception);
 
@@ -114,6 +120,11 @@ class Handler extends ExceptionHandler
 
     }
 
+    public function methodNotAllowedHttpJson()
+    {
+
+        return $this->renderSyscodeJson('method_not_allowed');
+    }
 
 
 

@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
-use App\Article;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -12,7 +12,8 @@ use App\Article;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-$middleware = ['auth'];
+//$middleware = ['auth'];
+$middleware = ['guest'];
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -22,29 +23,34 @@ Route::resource('posts', 'PostController');
 //Route::post('articles','ArticleController@store');
 Route::resource('articles', 'ArticleController');
 
-Route::get('notLogin', 'Auth/LoginController@notLogin');
-
-
 
 
 Route::group(['prefix' => '/home','middleware' => $middleware], function () {
 
     Route::any('/getName', 'HomeController@getName');
-    Route::any('/ses', ['uses' => 'HomeController@ses']);
+    Route::any('/ses',  'HomeController@ses');
+    Route::any('/server', 'HomeController@upLoadFileServer');
+    Route::get('/testweb', function () {
+        return 'Hello, World!';
+    });
+
 
 });
 
+// Route::post('/upload', 'HomeController@upLoadFileServer');
 
 
 
 
 
+Route::post('/client', 'HomeController@client');
+Route::any('/form', 'HomeController@uploadForm');
+Route::any('/server', 'HomeController@upLoadFileServer');
 
 
-
-
-
-
+Route::any('/testweb', function () {
+    return 'Hello, World!';
+});
 
 
 

@@ -16,10 +16,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::get('/task', 'TaskController@home');
+
+
+
 // Route::get('/task/send', 'TaskController@send');
 //
-// Route::namespace('Account')->group(function() {
+// Route::npace('Account')->group(function() {
 //     // App\Http\Controllers\Admin\AdminController
 //     Route::get('/account/task', 'TaskController@home');
 //     Route::get('/account/test', 'TestController@home');
@@ -49,3 +51,32 @@ Auth::routes();
 //
 //
 // });
+Route::get('/home', 'HomeController@index')->name('home');
+Route::post('/client', ['uses'=>'HomeController@client']);
+Route::any('/form', 'HomeController@uploadForm');
+Route::any('/server', 'HomeController@upLoadFileServer');
+
+
+Route::get('/task', 'TaskController@home');
+
+
+
+
+Route::get('/testweb', function () {
+    return 'Hello, World!';
+});
+
+// 关于我们
+Route::get('about', function () {
+    return view('about');
+});
+
+// 产品页
+Route::get('products', function () {
+    return view('products');
+});
+
+// 服务页
+Route::get('services', function () {
+    return view('services');
+});
