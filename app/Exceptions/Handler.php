@@ -5,11 +5,8 @@ namespace App\Exceptions;
 use Exception;
 use App\Tools\ResponseFormatHelper;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Routing\Router;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Contracts\Container\Container;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 class Handler extends ExceptionHandler
@@ -71,26 +68,49 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
 
-        if ($exception instanceof NotFoundHttpException)  {
 
-            return $this->notFoundHttpExceptionJson();
+            if ($exception instanceof NotFoundHttpException)  {
+                return $this->renderSyscodeJson('not_find_route');
 
-        }elseif ($exception instanceof ValidationException) {
+            }elseif ($exception instanceof ValidationException) {
 
-            return $this->validateExceptionJson($exception);
+                return $this->validateExceptionJson($exception);
 
-        }elseif ($exception instanceof CustomException)  {
+            }elseif ($exception instanceof CustomException)  {
 
-            return $exception->renderCustomExceptionJson();
+                return $exception->renderCustomExceptionJson();
 
-        }elseif ($exception instanceof ModelNotFoundException) {
-          return $this->modelNotFoundExceptionJson();
+            }elseif ($exception instanceof ModelNotFoundException) {
 
-        } elseif ($exception instanceof MethodNotAllowedHttpException) {
+                return $this->renderSyscodeJson('not_find_model');
 
-            return $this->methodNotAllowedHttpJson();
+            } elseif ($exception instanceof MethodNotAllowedHttpException) {
+
+                return $this->renderSyscodeJson('method_not_allowed');
 
             }
+
+
+        // if ($exception instanceof NotFoundHttpException)  {
+        //
+        //     return $this->notFoundHttpExceptionJson();
+        //
+        // }elseif ($exception instanceof ValidationException) {
+        //
+        //     return $this->validateExceptionJson($exception);
+        //
+        // }elseif ($exception instanceof CustomException)  {
+        //
+        //     return $exception->renderCustomExceptionJson();
+        //
+        // }elseif ($exception instanceof ModelNotFoundException) {
+        //   return $this->modelNotFoundExceptionJson();
+        //
+        // } elseif ($exception instanceof MethodNotAllowedHttpException) {
+        //
+        //     return $this->methodNotAllowedHttpJson();
+        //
+        //     }
 
         return parent::render($request, $exception);
 
@@ -108,23 +128,25 @@ class Handler extends ExceptionHandler
     }
 
 
-    public function notFoundHttpExceptionJson()
-    {
-        return $this->renderSyscodeJson('not_find_route');
-    }
 
+    // public function notFoundHttpExceptionJson()
+    // {
+    //     return $this->renderSyscodeJson('not_find_route');
+    // }
+    //
+    //
+    // public function modelNotFoundExceptionJson()
+    // {
+    //     return $this->renderSyscodeJson('not_find_model');
+    //
+    // }
+    //
+    // public function methodNotAllowedHttpJson()
+    // {
+    //
+    //     return $this->renderSyscodeJson('method_not_allowed');
+    // }
 
-    public function modelNotFoundExceptionJson()
-    {
-        return $this->renderSyscodeJson('not_find_model');
-
-    }
-
-    public function methodNotAllowedHttpJson()
-    {
-
-        return $this->renderSyscodeJson('method_not_allowed');
-    }
 
 
 

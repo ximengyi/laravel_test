@@ -18,8 +18,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::resource('posts', 'PostController');
-
 //Route::post('articles','ArticleController@store');
 Route::resource('articles', 'ArticleController');
 
@@ -37,11 +35,13 @@ Route::group(['prefix' => '/home','middleware' => $middleware], function () {
 
 });
 
-// Route::post('/upload', 'HomeController@upLoadFileServer');
 
 
 
 
+Route::post('/client', 'HomeController@client');
+Route::any('/form', 'HomeController@uploadForm');
+Route::any('/server', 'HomeController@upLoadFileServer');
 
 Route::post('/client', 'HomeController@client');
 Route::any('/form', 'HomeController@uploadForm');

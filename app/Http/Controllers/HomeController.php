@@ -37,8 +37,10 @@ class HomeController extends Controller
 
     public function ses()
     {
+
+        return 3333;
         Session::put('test','justatest');
-       $result =  Session::get('test');
+         $result =  Session::get('test');
         return  $result;
     }
 
@@ -71,11 +73,13 @@ class HomeController extends Controller
     public function uploadForm()
     {
 
+
         return view('index');
     }
 
     public function client()
     {
+
 
         $client = new \TusPhp\Tus\Client('http://apitemplaravel.test/server/');
         // Alert: Sanitize all inputs pr operly in production code

@@ -76,7 +76,5 @@ Route::get('products', function () {
     return view('products');
 });
 
-// 服务页
-Route::get('services', function () {
-    return view('services');
-});
+
+
